@@ -9,7 +9,7 @@ export VAULT_FORMAT="${VAULT_FORMAT:-json}"
 echo "Fetching secrets from Vault..."
 secrets=$(vault kv get -field=data ci/${SECRET_NAME})
 
-echo "Extracted secrets from Vault, setting environment variables..."
+echo "Extracted secrets from Vault, setting environment variables from the Vault json..."
 # Iterate through secrets and export them
 for key in $(echo $secrets_json | jq -r 'keys[]'); do
     value=$(echo $secrets_json | jq -r --arg key "$key" '.[$key]')
