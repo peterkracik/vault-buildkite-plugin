@@ -11,12 +11,10 @@ secrets=$(vault kv get -field=data ci/${SECRET_NAME})
 
 echo "Extracted secrets from Vault, setting environment variables..."
 # Iterate through secrets and export them
-for secret in $secrets
-do
-  IFS='=' read secret_key secret_value <<< "$secret"
-  echo "Setting $secret_key..."
-  # Export secret to environment
-  export $secret_key=$secret_value
+for key in $(echo $secrets_json | jq -r 'keys[]'); do
+    value=$(echo $secrets_json | jq -r --arg key "$key" '.[$key]')
+    echo "Setting $key..."
+    export $key=$value
 done
 
 echo "All secrets have been set as environment variables."
