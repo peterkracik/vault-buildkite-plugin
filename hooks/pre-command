@@ -7,7 +7,9 @@ echo "Setting VAULT format..."
 export VAULT_FORMAT="${VAULT_FORMAT:-json}"
 
 echo "Fetching secrets from Vault..."
-secrets=$(vault kv get -field=data ci/${SECRET_NAME})
+secrets_json=$(vault kv get -field=data ci/${SECRET_NAME})
+
+echo $secrets_json
 
 echo "Extracted secrets from Vault, setting environment variables from the Vault json..."
 # Iterate through secrets and export them
