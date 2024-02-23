@@ -1,0 +1,9 @@
+name: Vault
+description: Adds vault secrets to the ENV
+author: https://github.com/parkside-it
+requirements: []
+configuration:
+  properties:
+    project_name:
+      type: string
+  additionalProperties: false

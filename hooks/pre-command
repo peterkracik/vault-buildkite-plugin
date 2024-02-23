@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+SECRET_NAME="$BUILDKITE_PLUGIN_VAULT_SECRET_NAME"
+
+echo "Setting VAULT format..."
+export VAULT_FORMAT="${VAULT_FORMAT:-json}"
+
+echo "Fetching secrets from Vault..."
+secrets=$(vault kv get -field=data ci/${SECRET_NAME})
+
+echo "Extracted secrets from Vault, setting environment variables..."
+# Iterate through secrets and export them
+for secret in $secrets
+do
+  IFS='=' read secret_key secret_value <<< "$secret"
+  echo "Setting $secret_key..."
+  # Export secret to environment
+  export $secret_key=$secret_value
+done
+
+echo "All secrets have been set as environment variables."
+
